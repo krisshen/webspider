@@ -17,25 +17,25 @@ class MyprojectPipeline(object):
             currentValue = item['values'][i]
             if 'location' in currentHeader:
                 item['location'] = currentValue
-            # if 'rooms' in header:
-            #     item['rooms'] = currentValue
-            # if 'property type' in header:
-            #     item['propertyType'] = currentValue
-            # if 'floor area' in header:
-            #     item['floorArea'] = currentValue
-            # if 'land area' in header:
-            #     item['landArea'] = currentValue
-            # if 'price' in header:
-            #     item['price'] = currentValue
-            # if 'parking' in header:
-            #     item['parking'] = currentValue
+            if 'rooms' in currentHeader:
+                item['rooms'] = currentValue
+            if 'property type' in currentHeader:
+                item['propertyType'] = currentValue
+            if 'floor area' in currentHeader:
+                item['floorArea'] = currentValue
+            if 'land area' in currentHeader:
+                item['landArea'] = currentValue
+            if 'price' in currentHeader:
+                item['price'] = currentValue
+            if 'parking' in currentHeader:
+                item['parking'] = currentValue
 
         spider.logger.info("location: %s", item['location'].strip())
-        # spider.logger.info("rooms: %s", item['rooms'].strip())
-        # spider.logger.info("propertyType: %s", item['propertyType'].strip())
-        # spider.logger.info("floorArea: %s", item['floorArea'].strip())
-        # spider.logger.info("landArea: %s", item['landArea'].strip())
-        # spider.logger.info("price: %s", item['price'].strip())
-        # spider.logger.info("parking: %s", item['parking'].strip())
+        spider.logger.info("rooms: %s", item['rooms'].strip())
+        spider.logger.info("propertyType: %s", item['propertyType'].strip())
+        spider.logger.info("floorArea: %s", item['floorArea'].strip())
+        spider.logger.info("landArea: %s", item['landArea'].strip())
+        spider.logger.info("price: %s", item['price'].strip())
+        spider.logger.info("parking: %s", item['parking'].strip())
        
         return item

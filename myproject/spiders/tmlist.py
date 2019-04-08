@@ -61,20 +61,23 @@ class TmlistSpider(scrapy.Spider):
         property['listingId'] = listingId
         property['listedDate'] = listedDate
         # following attributes will be processed in pipelines.py
-        # property['location'] = location
-        # property['rooms'] = rooms
-        # property['propertyType'] = propertyType
-        # property['floorArea'] = floorArea
-        # property['landArea'] = landArea
-        # property['price'] = price
-        # property['parking'] = parking
-        # property['description'] = description
+        property['location'] = ''
+        property['rooms'] = ''
+        property['propertyType'] = ''
+        property['floorArea'] = ''
+        property['landArea'] = ''
+        property['price'] = ''
+        property['parking'] = ''
+        property['description'] = ''
 
         headers = response.xpath("//*[@id='ltHeaderRow']/text()").getall()
         values = response.xpath("//*[@id='ListingAttributes']/tbody/tr/td/text()").getall()
-
+        cleanedValues = []
+        for value in values:
+            if value.strip() != '':
+                cleanedValues.append(value)
         property['headers'] = headers
-        property['values'] = values
+        property['values'] = cleanedValues
 
         # yield {
         #     'header': headers,
