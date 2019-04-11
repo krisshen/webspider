@@ -38,9 +38,10 @@ class TmlistSpider(scrapy.Spider):
         # get next page url, need to click 'Search' button first, pls refer middlewares.py
         #
         self.logger.info("next page is..............")
-        nextPageRelativeUrl = response.xpath("//a[contains(@href, '/browse/categoryattributesearchresults')]").xpath('@href').extract_first()
+        nextPageRelativeUrl = response.xpath("//a[contains(@rel, 'next')]").xpath('@href').extract_first()
         nextPageFullUrl = response.urljoin(nextPageRelativeUrl)
-        yield {'nextPage': nextPageFullUrl}
+        # yield {'nextPage': nextPageFullUrl}
+        yield scrapy.Request(url=nextPageFullUrl, meta={'property': property}, callback=self.parse)
 
     def parsePropery(self, response):
         # response.xpath("").extract_first()
