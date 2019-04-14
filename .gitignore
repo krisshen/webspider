@@ -102,5 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-myproject/sheets/quickstart/credentials.json
+myproject/sheets/token.pickle
 myproject/sheets/quickstart/token.pickle
+myproject/sheets/quickstart/credentials.json

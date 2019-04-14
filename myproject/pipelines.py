@@ -30,6 +30,8 @@ class MyprojectPipeline(object):
             if 'parking' in currentHeader:
                 item['parking'] = currentValue
 
+        item['values'] = ''
+        item['headers'] = ''
         spider.logger.info("location: %s", item['location'].strip())
         spider.logger.info("rooms: %s", item['rooms'].strip())
         spider.logger.info("propertyType: %s", item['propertyType'].strip())
