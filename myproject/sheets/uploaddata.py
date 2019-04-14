@@ -9,7 +9,7 @@ class SpreadSheet():
     def __init__(self):
         print("init")
         Google_Folder_ID = "1xGdQ5u2SbsmYNKzqQgcJ41lp2y43ADAH"
-        SCOPES = "https://www.googleapis.com/auth/spreadsheets"
+        SCOPES = ["https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.metadata"]
         
         creds = None
         # The file token.pickle stores the user's access and refresh tokens, and is
