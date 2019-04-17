@@ -1,6 +1,8 @@
 import os.path
 import pickle
 import datetime
+import time
+import csv
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -37,15 +39,15 @@ class GoogleDrive():
         self.sheetService = build('sheets', 'v4', credentials=creds)
         self.fileService = build('drive', 'v3', credentials=creds)
 
-    def createSheet(self, title):
+    def createSheet(self):
         print("create new sheet")
         sheetService = self.sheetService
-        spreadsheet = {
+        spreadsheetBody = {
             'properties': {
-                'title': title
+                'title': time.ctime()
             }
         }
-        spreadsheet = sheetService.spreadsheets().create(body=spreadsheet,
+        spreadsheet = sheetService.spreadsheets().create(body=spreadsheetBody,
                                             fields='spreadsheetId').execute()
         print('Spreadsheet ID: {0}'.format(spreadsheet.get('spreadsheetId')))
         # [END sheets_create]
@@ -70,6 +72,14 @@ class GoogleDrive():
             for item in items:
                 print(u'{0} ({1})'.format(item['name'], item['id']))
 
+    def writeToSheet(self, sheetId, filePath):
+        with open(filePath, 'r') as f:
+            reader = csv.reader(f)
+            values = list(reader)
+        data = {'values': values}
+        self.sheetService.spreadsheets().values().update(spreadsheetId=sheetId,
+        range='A1', body=data, valueInputOption='RAW').execute()
+
 def getCurrentDate():
     now = datetime.datetime.now().strftime("%Y-%m-%d")
     print("get current date: ", now)
@@ -78,9 +88,10 @@ def getCurrentDate():
 def main():
     print("uploaddata.main")
     googleDrive = GoogleDrive()
-    date = getCurrentDate()
-    sheetId = googleDrive.createSheet(date)
+    # date = getCurrentDate()
+    sheetId = googleDrive.createSheet()
     googleDrive.moveFile(sheetId)
+    googleDrive.writeToSheet(sheetId, 'test.csv')
     
 
 if __name__ == '__main__':
