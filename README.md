@@ -8,7 +8,7 @@
 - crawl property data per city (Done)
 - save data to local csv file using pipeline (Done)
 - name files with city names (To Do)
-- format data, trim and remove blank lines (To Do)
+- format data, trim and remove blank lines (Done)
 - command
   
     ```python

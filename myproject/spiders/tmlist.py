@@ -59,8 +59,8 @@ class TmlistSpider(scrapy.Spider):
         # parking = response.xpath("//*[@id='ListingAttributes']/tbody/tr[8]/td").extract_first()
         # description = response.xpath("//*[@id='ListingDescription_ListingDescription']/text()").extract_first()
         
-        property['listingId'] = listingId
-        property['listedDate'] = listedDate
+        property['listingId'] = listingId.replace('Listing #:', '').strip()
+        property['listedDate'] = listedDate.replace('Listed: ', '').strip()
         # following attributes will be processed in pipelines.py
         property['location'] = ''
         property['rooms'] = ''
