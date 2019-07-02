@@ -69,7 +69,7 @@ class MyprojectDownloaderMiddleware(object):
     # passed objects.
     def __init__(self, timeout=None, service_args=[]):
         self.logger = getLogger(__name__)
-        self.timeout = 5
+        self.timeout = 20
         self.browser = webdriver.Chrome('chromedriver\chromedriver.exe')
         # self.browser = webdriver.PhantomJS(r'E:\phantomjs-2.1.1-windows\bin\phantomjs.exe')
         self.browser.set_window_size(1400, 700)

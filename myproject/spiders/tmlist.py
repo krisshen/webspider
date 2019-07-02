@@ -6,7 +6,10 @@ from myproject.items import Property
 class TmlistSpider(scrapy.Spider):
     name = 'tmlist'
     allowed_domains = ['www.trademe.co.nz']
-    start_urls = ['https://www.trademe.co.nz/property/residential-property-for-sale/waikato/waitomo']
+    start_urls = [
+        'https://www.trademe.co.nz/property/residential-property-for-sale/waikato/waitomo',
+        'https://www.trademe.co.nz/property/residential-property-for-sale/waikato/otorohanga'
+        ]
 
     def parse(self, response):
         # titles = response.xpath("//*[@class='tmp-search-card-list-view__title ']/text()").getall()
@@ -79,6 +82,10 @@ class TmlistSpider(scrapy.Spider):
                 cleanedValues.append(value)
         property['headers'] = headers
         property['values'] = cleanedValues
+
+        #check open home times
+        if 'Open home times' in headers[-1]:
+            property['values'].append(response.xpath("//*[@id='open-homes']/div/button/span[1]/text()").extract_first())
 
         # yield {
         #     'header': headers,

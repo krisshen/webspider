@@ -54,6 +54,7 @@ class GoogleDrive():
         return spreadsheet.get('spreadsheetId')
 
     def moveFile(self, file_id):
+        # URL: https://drive.google.com/drive/u/0/folders/1xGdQ5u2SbsmYNKzqQgcJ41lp2y43ADAH
         self.Google_Folder_ID = "1xGdQ5u2SbsmYNKzqQgcJ41lp2y43ADAH"
         self.file = self.fileService.files().get(fileId=file_id, fields='parents').execute()
         self.previousParents = ",".join(self.file.get('parents'))
@@ -91,8 +92,7 @@ def main():
     # date = getCurrentDate()
     sheetId = googleDrive.createSheet()
     googleDrive.moveFile(sheetId)
-    googleDrive.writeToSheet(sheetId, 'test.csv')
+    googleDrive.writeToSheet(sheetId, 'Waikato.csv')
     
-
 if __name__ == '__main__':
     main()

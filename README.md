@@ -12,7 +12,8 @@
 - command
   
     ```python
-        scrapy crawl tmlist -o output.csv -t csv
+        scrapy crawl tmlist
+        #scrapy crawl tmlist -o output.csv -t csv
     ```
 
 ### upload them to Google through Google Sheet and Drive API

@@ -5,10 +5,13 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import csv
+import os
 from myproject import settings
 
 def writeToCsv(filePath, item):
     writer = csv.writer(open(filePath, 'a'), lineterminator='\n')
+    if open(filePath).read() == '':
+        writer.writerow(item.keys())
     writer.writerow([item[key] for key in item.keys()])
 
 class MyprojectPipeline(object):
@@ -19,7 +22,7 @@ class MyprojectPipeline(object):
         #         item['location']
         for i, header in enumerate(item['headers']):
             currentHeader = header.strip().lower()
-            currentValue = item['values'][i].strip()
+            currentValue = item['values'][i].strip().replace(u'\xad', u'')
             if 'location' in currentHeader:
                 item['location'] = currentValue
             if 'rooms' in currentHeader:
@@ -44,5 +47,7 @@ class MyprojectPipeline(object):
         spider.logger.info("landArea: %s", item['landArea'].strip())
         spider.logger.info("price: %s", item['price'].strip())
         spider.logger.info("parking: %s", item['parking'].strip())
-       
+
+        filePath = 'myproject/sheets/' +  item['location'].split(',')[-2].strip() + '.csv'
+        writeToCsv(filePath, item)
         return item
