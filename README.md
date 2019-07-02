@@ -7,7 +7,7 @@
 ### crawl data
 - crawl property data per city (Done)
 - save data to local csv file using pipeline (Done)
-- name files with city names (To Do)
+- name csv files with city names (Done)
 - format data, trim and remove blank lines (Done)
 - command
   
