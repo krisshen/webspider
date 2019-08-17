@@ -12,8 +12,10 @@
 - command
   
     ```python
+        #crawl and save data into csv files named with city name
         scrapy crawl tmlist
-        #scrapy crawl tmlist -o output.csv -t csv
+        #upload csv files to Google Sheet, currently file name is hard coded
+        python myproject/sheets/uploaddata.py
     ```
 
 ### upload them to Google through Google Sheet and Drive API
