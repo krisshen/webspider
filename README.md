@@ -14,7 +14,7 @@
     ```python
         #crawl and save data into csv files named with city name
         scrapy crawl tmlist
-        #upload csv files to Google Sheet, currently file name is hard coded
+        #upload csv files to Google Sheet named with date time, currently hard coded file to be uploaded
         python myproject/sheets/uploaddata.py
     ```
 
