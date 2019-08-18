@@ -15,13 +15,14 @@
         #crawl and save data into csv files named with city name
         scrapy crawl tmlist
         #upload csv files to Google Sheet named with date time, currently hard coded file to be uploaded
-        python myproject/sheets/uploaddata.py
+        cd myproject/sheets
+        python uploaddata.py
     ```
 
 ### upload them to Google through Google Sheet and Drive API
 - new Google sheet based on date, move it to specific folder (Done)
 - read local csv file, upload to Google sheet (Done)
-- name Google sheet by city name (To Do)
+- name Google sheet by city name (Done)
 
 ### publish data to web site (To Do)
 

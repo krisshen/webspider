@@ -48,6 +48,6 @@ class MyprojectPipeline(object):
         spider.logger.info("price: %s", item['price'].strip())
         spider.logger.info("parking: %s", item['parking'].strip())
 
-        filePath = 'myproject/sheets/' +  item['location'].split(',')[-2].strip() + '.csv'
+        filePath = 'myproject/sheets/generated/' +  item['location'].split(',')[-2].strip() + '.csv'
         writeToCsv(filePath, item)
         return item

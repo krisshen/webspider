@@ -3,6 +3,7 @@ import pickle
 import datetime
 import time
 import csv
+import glob
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -40,7 +41,7 @@ class GoogleDrive():
         self.fileService = build('drive', 'v3', credentials=creds)
 
     def createSheet(self):
-        print("create new sheet")
+        print("create new spreadsheet")
         sheetService = self.sheetService
         spreadsheetBody = {
             'properties': {
@@ -73,13 +74,34 @@ class GoogleDrive():
             for item in items:
                 print(u'{0} ({1})'.format(item['name'], item['id']))
 
-    def writeToSheet(self, sheetId, filePath):
-        with open(filePath, 'r') as f:
-            reader = csv.reader(f)
-            values = list(reader)
-        data = {'values': values}
-        self.sheetService.spreadsheets().values().update(spreadsheetId=sheetId,
-        range='A1', body=data, valueInputOption='RAW').execute()
+    def writeToSheet(self, sheetId, csvFilePathPattern):
+        for filePath in glob.glob(csvFilePathPattern):
+            with open(filePath, 'r') as f:
+                reader = csv.reader(f)
+                values = list(reader)
+            sheetName = filePath.split('\\')[1]
+            data = {'values': values}
+            self.createWorkingSheet(sheetId, sheetName)
+            
+            print('uploading data for: ', sheetName)
+            self.sheetService.spreadsheets().values().update(spreadsheetId=sheetId, 
+            range="'"+sheetName+"'!A1", body=data, valueInputOption='RAW').execute()
+
+    def createWorkingSheet(self, sheetId, sheetName):
+        print('create new working sheet: ', sheetName)
+        data = {
+            'requests': [
+                {
+                    'addSheet': {
+                        'properties': {
+                            'title': sheetName
+                        }
+                    }
+                }
+                
+            ]
+        }
+        self.sheetService.spreadsheets().batchUpdate(spreadsheetId=sheetId, body=data).execute()
 
 def getCurrentDate():
     now = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -92,7 +114,7 @@ def main():
     # date = getCurrentDate()
     sheetId = googleDrive.createSheet()
     googleDrive.moveFile(sheetId)
-    googleDrive.writeToSheet(sheetId, 'Waikato.csv')
+    googleDrive.writeToSheet(sheetId, 'generated/*.csv')
     
 if __name__ == '__main__':
     main()
