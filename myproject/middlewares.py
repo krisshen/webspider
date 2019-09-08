@@ -103,7 +103,7 @@ class MyprojectDownloaderMiddleware(object):
             try:
                 self.logger.info("clicking search button")
                 self.browser.get(request.url)
-                searchButton = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='sidebarSearch']/button")))
+                searchButton = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='sidebarSearch']/div[10]/button")))
                 searchButton.click()
                 self.isSearchButtonClicked = True
                 self.wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(@href, '/browse/categoryattributesearchresults')]")))
