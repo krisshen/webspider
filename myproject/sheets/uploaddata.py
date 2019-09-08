@@ -79,13 +79,28 @@ class GoogleDrive():
             with open(filePath, 'r') as f:
                 reader = csv.reader(f)
                 values = list(reader)
-            sheetName = filePath.split('\\')[1]
+            sheetName = filePath.split('\\')[1].replace('.csv', '')
             data = {'values': values}
             self.createWorkingSheet(sheetId, sheetName)
             
             print('uploading data for: ', sheetName)
             self.sheetService.spreadsheets().values().update(spreadsheetId=sheetId, 
             range="'"+sheetName+"'!A1", body=data, valueInputOption='RAW').execute()
+        # remove the first working sheet which was created by default
+        self.deleteWorkingSheet(sheetId, 0)
+
+    def deleteWorkingSheet(self, sheetId, workingSheetId):
+        print('delete working sheet:', workingSheetId)
+        data = {
+            'requests': [
+                {
+                    'deleteSheet': {
+                        'sheetId': workingSheetId
+                    }
+                }
+            ]
+        }
+        self.sheetService.spreadsheets().batchUpdate(spreadsheetId=sheetId, body=data).execute()
 
     def createWorkingSheet(self, sheetId, sheetName):
         print('create new working sheet: ', sheetName)
