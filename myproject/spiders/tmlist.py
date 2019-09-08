@@ -8,7 +8,8 @@ class TmlistSpider(scrapy.Spider):
     allowed_domains = ['www.trademe.co.nz']
     start_urls = [
         'https://www.trademe.co.nz/property/residential-property-for-sale/waikato/waitomo',
-        'https://www.trademe.co.nz/property/residential-property-for-sale/waikato/otorohanga'
+        'https://www.trademe.co.nz/property/residential-property-for-sale/waikato/otorohanga',
+        'https://www.trademe.co.nz/property/residential-property-for-sale/wellington/wellington'
         ]
 
     def parse(self, response):
@@ -27,13 +28,27 @@ class TmlistSpider(scrapy.Spider):
             property = Property()
             propertyPageRelativeUrl = propertyCard.xpath('@href').extract_first()
             propertyPageFullUrl = response.urljoin(propertyPageRelativeUrl)
-            title = propertyCard.xpath(".//div[@class='tmp-search-card-list-view__title ']/text()").get(default=propertyCard.xpath(".//div[@class='tmp-search-card-list-view__title tmp-search-card-list-view__title--bold']/text()").get())
+            # title = propertyCard.xpath(".//div[@class='tmp-search-card-list-view__title ']/text()").get(default=propertyCard.xpath(".//div[@class='tmp-search-card-list-view__title tmp-search-card-list-view__title--bold']/text()").get())
             # yield {
             #     'title': title,
             #     'propertyPageRelativeUrl': propertyPageRelativeUrl,
             #     'responseUrl:': propertyPageFullUrl
             # }
-            property['title'] = title
+            # property['title'] = title
+            property['link'] = propertyPageFullUrl
+            yield scrapy.Request(url=propertyPageFullUrl, meta={'property': property}, callback=self.parsePropery)
+
+        for propertyCard in response.xpath("//*[@class='tmp-search-card-top-tier__link']"):
+            property = Property()
+            propertyPageRelativeUrl = propertyCard.xpath('@href').extract_first()
+            propertyPageFullUrl = response.urljoin(propertyPageRelativeUrl)
+            # title = propertyCard.xpath(".//div[@class='tmp-search-card-top-tier__title ']/text()").get(default=propertyCard.xpath(".//div[@class='tmp-search-card-top-tier__title tmp-search-card-top-tier__title--bold']/text()").get())
+            # yield {
+            #     'title': title,
+            #     'propertyPageRelativeUrl': propertyPageRelativeUrl,
+            #     'responseUrl:': propertyPageFullUrl
+            # }
+            # property['title'] = title
             property['link'] = propertyPageFullUrl
             yield scrapy.Request(url=propertyPageFullUrl, meta={'property': property}, callback=self.parsePropery)
 
@@ -51,6 +66,7 @@ class TmlistSpider(scrapy.Spider):
         
         property = response.meta['property']
         
+        title = response.xpath("//*[@id='TitleContrainer']/div[2]/h1/text()").extract_first()
         listingId = response.xpath("//*[@id='ListingTitle_ListingNumberContainer']/text()").extract_first()
         listedDate = response.xpath("//*[@id='PriceSummaryDetails_ListedStatusText']/text()").extract_first()
         # location = response.xpath("//*[@id='ListingAttributes']/tbody/tr[1]/td/text()").extract_first()
@@ -62,6 +78,7 @@ class TmlistSpider(scrapy.Spider):
         # parking = response.xpath("//*[@id='ListingAttributes']/tbody/tr[8]/td").extract_first()
         # description = response.xpath("//*[@id='ListingDescription_ListingDescription']/text()").extract_first()
         
+        property['title'] = title
         property['listingId'] = listingId.replace('Listing #:', '').strip()
         property['listedDate'] = listedDate.replace('Listed: ', '').strip()
         # following attributes will be processed in pipelines.py
